@@ -104,12 +104,12 @@ fi
 rprefix=$(realpath -m "$root/$prefix")
 if ! $nonroot; then
     retc="$root/etc"
-    rsysconfdir="$root/$sysconfdir"
+    rsysconfdir=$(realpath -m "$root/$sysconfdir")
     rusr="$root/usr"
     rsystemd="$rusr/lib/systemd/system"
 else
     retc="$rprefix/etc"
-    rsysconfdir="$rprefix/$sysconfdir"
+    rsysconfdir=$(realpath -m "$rprefix/$sysconfdir")
     rsystemd="$HOME/.config/systemd/user"
 fi
 
@@ -133,7 +133,7 @@ else
     cat << EOS > "$rsystemd"/scylla-jmx.service.d/nonroot.conf
 [Service]
 EnvironmentFile=
-EnvironmentFile=$retc/sysconfig/scylla-jmx
+EnvironmentFile=$rsysconfdir/scylla-jmx
 ExecStart=
 ExecStart=$rprefix/jmx/scylla-jmx \$SCYLLA_JMX_PORT \$SCYLLA_API_PORT \$SCYLLA_API_ADDR \$SCYLLA_JMX_ADDR \$SCYLLA_JMX_FILE \$SCYLLA_JMX_LOCAL \$SCYLLA_JMX_REMOTE \$SCYLLA_JMX_DEBUG
 User=
